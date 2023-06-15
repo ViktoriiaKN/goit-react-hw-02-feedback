@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'components/Component/Component';
 
 export const App = () => {
   return <div></div>;
@@ -16,14 +16,16 @@ class Amount extends Component {
 
   render() {
     const { good, neutral, bad } = this.props;
-
+    function handleClick(evt) {
+      console.log(evt);
+    }
     return (
       <div>
         <section>
           <h1>Please leave feedback</h1>
-          <button>Good</button>
-          <button>Neutral</button>
-          <button>Bad</button>
+          <button onClick={handleClick}>Good</button>
+          <button onClick={handleClick}>Neutral</button>
+          <button onClick={handleClick}>Bad</button>
           <h2>Statistics</h2>
           <ul class="stat-list">
             <li class="item">
