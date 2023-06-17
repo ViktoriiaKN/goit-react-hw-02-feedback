@@ -1,40 +1,66 @@
-import React, { Component } from 'components/Component/Component';
+import React, { Component } from 'react';
+import { Wrapper } from './App.styled';
+import PropTypes from 'prop-types';
 
-export const App = () => {
-  return <div></div>;
-};
+export class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      good: 0,
+      neutral: 0,
+      bad: 0,
+    };
+  }
 
-class Amount extends Component {
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
+  incrementFeedbackCount = category => {
+    this.setState(prevState => ({
+      [category]: prevState[category] + 1,
+    }));
   };
 
-  countTotalFeedback() {}
-  countPositiveFeedbackPercentage() {}
+  countTotalFeedback = () => {
+    const { good, neutral, bad } = this.state;
+    return good + neutral + bad;
+  };
+
+  countPositiveFeedbackPercentage = () => {
+    const { good, neutral } = this.state;
+    const totalFeedback = this.countTotalFeedback();
+    const positiveFeedback = good + neutral;
+    return totalFeedback > 0 ? (positiveFeedback / totalFeedback) * 100 : 0;
+  };
 
   render() {
-    const { good, neutral, bad } = this.props;
-    function handleClick(evt) {
-      console.log(evt);
-    }
+    const { good, neutral, bad } = this.state;
+    const totalFeedback = this.countTotalFeedback();
+    const positiveFeedbackPercentage = this.countPositiveFeedbackPercentage();
+
     return (
-      <div>
+      <Wrapper>
         <section>
           <h1>Please leave feedback</h1>
-          <button onClick={handleClick}>Good</button>
-          <button onClick={handleClick}>Neutral</button>
-          <button onClick={handleClick}>Bad</button>
+          <button onClick={() => this.incrementFeedbackCount('good')}>
+            Good
+          </button>
+          <button onClick={() => this.incrementFeedbackCount('neutral')}>
+            Neutral
+          </button>
+          <button onClick={() => this.incrementFeedbackCount('bad')}>
+            Bad
+          </button>
           <h2>Statistics</h2>
-          <ul class="stat-list">
-            <li class="item">
-              <span class="label">.docx</span>
-              <span class="percentage">4%</span>
+          <ul className="stat-list">
+            <li className="item">
+              <span className="label">Total Feedback:</span>
+              <span className="percentage">{totalFeedback}</span>
+            </li>
+            <li className="item">
+              <span className="label">Positive Feedback Percentage:</span>
+              <span className="percentage">{positiveFeedbackPercentage}</span>
             </li>
           </ul>
         </section>
-      </div>
+      </Wrapper>
     );
   }
 }
