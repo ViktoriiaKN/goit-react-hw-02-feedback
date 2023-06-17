@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Wrapper } from './App.styled';
-import PropTypes from 'prop-types';
+import { Statistics } from './Statistics/Statistics';
+import { Section } from './Section/Section';
+import { FeedbackOptions } from './FeedbackOptions/FeedbackOptions';
 
 export class App extends Component {
   constructor(props) {
@@ -11,6 +13,18 @@ export class App extends Component {
       bad: 0,
     };
   }
+
+  componentDidMount() {
+    this.resetFeedbackCounts();
+  }
+
+  resetFeedbackCounts = () => {
+    this.setState({
+      good: 0,
+      neutral: 0,
+      bad: 0,
+    });
+  };
 
   incrementFeedbackCount = category => {
     this.setState(prevState => ({
@@ -37,29 +51,21 @@ export class App extends Component {
 
     return (
       <Wrapper>
-        <section>
-          <h1>Please leave feedback</h1>
-          <button onClick={() => this.incrementFeedbackCount('good')}>
-            Good
-          </button>
-          <button onClick={() => this.incrementFeedbackCount('neutral')}>
-            Neutral
-          </button>
-          <button onClick={() => this.incrementFeedbackCount('bad')}>
-            Bad
-          </button>
-          <h2>Statistics</h2>
-          <ul className="stat-list">
-            <li className="item">
-              <span className="label">Total Feedback:</span>
-              <span className="percentage">{totalFeedback}</span>
-            </li>
-            <li className="item">
-              <span className="label">Positive Feedback Percentage:</span>
-              <span className="percentage">{positiveFeedbackPercentage}</span>
-            </li>
-          </ul>
-        </section>
+        <Section title="Please leave feedback">
+          <FeedbackOptions
+            options={['good', 'neutral', 'bad']}
+            onLeaveFeedback={this.incrementFeedbackCount}
+          />
+        </Section>
+        <Section title="Statistics">
+          <Statistics
+            good={good}
+            neutral={neutral}
+            bad={bad}
+            total={totalFeedback}
+            positivePercentage={positiveFeedbackPercentage}
+          />
+        </Section>
       </Wrapper>
     );
   }
